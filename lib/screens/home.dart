@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/ls.jpg'),
+            image: AssetImage('assets/images/bk.jpg'),
             fit: BoxFit.cover,
           ),
         ),
@@ -103,7 +103,7 @@ class _HomeState extends State<Home> {
               ),
               const Text(
                 'Login: kminchelle | Pass: 0lelplR',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                style: TextStyle(fontSize: 14, color: Colors.black),
               ),
               const SizedBox(height: 20),
 

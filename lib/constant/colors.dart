@@ -8,3 +8,4 @@ const Color tdGrey = Color(0xFF717171);
 
 const Color tdBGColor = Color(0xFFEEEFF5);
 const Color tdGreen = Color(0xFF00FF00);
+const Color tdWhite = Color(0xFFEEEFF5);
