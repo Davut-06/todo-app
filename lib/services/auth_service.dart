@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'dart:async'; // Для TimeoutException
+import 'dart:async'; // Для TimeoutException и Future.delayed
+import 'dart:developer' as developer; // Для логирования
 import '../models/user.dart';
 import '../models/todo.dart';
 
 class AuthService {
   static const String baseUrl = 'https://dummyjson.com';
 
-  // Метод 1: Вход в систему (с отладкой ошибок и таймаутом)
+  // Метод 1: Вход в систему (login)
   Future<User> login(String username, String password) async {
     final url = Uri.parse('$baseUrl/auth/login');
 
@@ -57,7 +58,7 @@ class AuthService {
     }
   }
 
-  // Метод 2: Получение списка To-Do задач для пользователя (оставляем без изменений)
+  // Метод 2: Получение списка To-Do задач для пользователя (fetchUserTodos)
   Future<List<Todo>> fetchUserTodos(int userId, String token) async {
     final url = Uri.parse('$baseUrl/todos/user/$userId');
 
@@ -79,5 +80,31 @@ class AuthService {
         'Failed to load user todos. Status: ${response.statusCode}',
       );
     }
+  }
+
+  // ------------------------------------------------------------------
+  // *** ИСПРАВЛЕНИЕ: МЕТОД 3 ДОБАВЛЕН ВНУТРЬ КЛАССА AuthService ***
+  // ------------------------------------------------------------------
+  Future<Todo> addTodo(Todo newTodo, int userId, String token) async {
+    // 1. Имитация задержки сети
+    await Future.delayed(const Duration(milliseconds: 700));
+
+    // 2. Имитация успешного ответа
+    const int mockStatusCode = 200;
+
+    // 3. Вывод в консоль для подтверждения (ваш запрос)
+    developer.log(
+      'MOCK API: УСПЕШНАЯ ОТПРАВКА (Status $mockStatusCode)',
+      name: 'AuthService/addTodo',
+      error: 'Запрос: POST /todos. UserID: $userId. Задача: ${newTodo.todo}',
+    );
+
+    // 4. Имитация ответа сервера: возвращаем объект с присвоенным ID
+    //    используем время для создания уникального мок-ID
+    return newTodo.copyWith(
+      id: DateTime.now().millisecondsSinceEpoch,
+      completed: false,
+      userId: userId,
+    );
   }
 }

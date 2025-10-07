@@ -14,12 +14,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // 2. Переменные для логина
-  final TextEditingController _usernameController = TextEditingController(
-    text: 'kminchelle',
-  );
-  final TextEditingController _passwordController = TextEditingController(
-    text: '0lelplR',
-  );
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final AuthService _authService = AuthService();
   bool _isLoading = false;
 
@@ -72,78 +68,133 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    // 4. UI для логина
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Login to App',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bk.jpg'),
-            fit: BoxFit.cover,
+      // Убираем AppBar для чистого экрана
+      body: Stack(
+        // Используем Stack для размещения изображения под UI
+        children: [
+          // 1. Фоновое изображение (ПЕРВЫЙ ЭЛЕМЕНТ В STACK)
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/1b.jpg', // <--- ЗАМЕНИТЕ НА ПУТЬ К ВАШЕМУ ФОНОВОМУ ИЗОБРАЖЕНИЮ
+              fit: BoxFit.cover, // Растянуть изображение на весь экран
+            ),
           ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'LOGIN:',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const Text(
-                'Login: kminchelle | Pass: 0lelplR',
-                style: TextStyle(fontSize: 14, color: Colors.black),
-              ),
-              const SizedBox(height: 20),
 
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 30),
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                    onPressed: _handleLogin,
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: Colors.blueAccent,
-                    ),
-                    child: const Text(
-                      'LOGIN',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+          // 2. Весь остальной UI (поверх изображения)
+          Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // 1. Заголовок
+                  const Text(
+                    'WELCOME',
+                    style: TextStyle(
+                      fontSize: 42,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
                     ),
                   ),
-            ],
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Sign in to access your tasks',
+                    style: TextStyle(fontSize: 16, color: Colors.white70),
+                  ),
+                  const SizedBox(height: 40),
+
+                  // 2. Блок входа (Карточка)
+                  Container(
+                    padding: const EdgeInsets.all(25.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Поле Username
+                        TextField(
+                          controller: _usernameController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            labelText: 'Username',
+                            hintText: 'Emily',
+                            labelStyle: const TextStyle(color: Colors.white70),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.2),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+
+                        // Поле Password
+                        TextField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            hintText: 'emilyspass',
+                            labelStyle: const TextStyle(color: Colors.white70),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.2),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+
+                        // Кнопка LOGIN
+                        _isLoading
+                            ? const CircularProgressIndicator(
+                              color: Colors.cyanAccent,
+                            )
+                            : ElevatedButton(
+                              onPressed: _handleLogin,
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(double.infinity, 60),
+                                backgroundColor: Colors.cyan,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                elevation: 10,
+                              ),
+                              child: const Text(
+                                'SIGN IN',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  const Text(
+                    'Help: Emily | emilyspass',
+                    style: TextStyle(fontSize: 14, color: Colors.white54),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
