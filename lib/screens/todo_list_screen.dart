@@ -12,7 +12,7 @@ class TodoListScreen extends StatefulWidget {
 }
 
 class _TodoListScreenState extends State<TodoListScreen> {
-  // *** ШАГ 1: ДОБАВЛЕНИЕ КОНТРОЛЛЕРА В КЛАСС СОСТОЯНИЯ ***
+  //  ШАГ 1: ДОБАВЛЕНИЕ КОНТРОЛЛЕРА В КЛАСС СОСТОЯНИЯ
   final TextEditingController _todoController = TextEditingController();
 
   late Future<List<Todo>> _todosFuture;
@@ -20,16 +20,14 @@ class _TodoListScreenState extends State<TodoListScreen> {
   @override
   void initState() {
     super.initState();
-    // Запускаем загрузку задач, используя ID и токен из объекта User
     _todosFuture = AuthService().fetchUserTodos(
       widget.user.id,
       widget.user.token,
     );
   }
 
-  // *** ШАГ 2: МЕТОД ДЛЯ ОТОБРАЖЕНИЯ ДИАЛОГА ***
+  //  ШАГ 2: МЕТОД ДЛЯ ОТОБРАЖЕНИЯ ДИАЛОГА
   void _showAddTodoDialog() {
-    // Очищаем контроллер перед открытием, если там остался старый текст
     _todoController.clear();
 
     showDialog(
@@ -50,9 +48,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
             ElevatedButton(
               onPressed: () {
                 if (_todoController.text.isNotEmpty) {
-                  // Вызываем метод для отправки/имитации
                   _addTodo(_todoController.text);
-                  Navigator.of(context).pop(); // Закрыть диалог
+                  Navigator.of(context).pop();
                 }
               },
               child: const Text('Save'),
@@ -63,33 +60,25 @@ class _TodoListScreenState extends State<TodoListScreen> {
     );
   }
 
-  //  ШАГ 3: МЕТОД ИМИТАЦИИ ОТПРАВКИ (СТАТУС 200)
   Future<void> _addTodo(String todoText) async {
-    // ИСПРАВЛЕНИЕ: Добавлена запятая после completed: false
     final mockTodo = Todo(
       id: 0,
       todo: todoText,
-      completed: false, // <--- ИСПРАВЛЕНА ОШИБКА: пропущена запятая
+      completed: false,
       userId: widget.user.id,
     );
 
     try {
-      // Предполагаем, что addTodo находится в AuthService и имитирует статус 200
-      final addedTodo = await AuthService().addTodo(
+      final _ = await AuthService().addTodo(
         mockTodo,
         widget.user.id,
         widget.user.token,
       );
-
-      // Успех! Это ваш имитированный статус 200
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Task added successfully (Mock 200)!')),
         );
-
-        // Обновляем список, чтобы новая задача появилась
         setState(() {
-          // Перезагрузка списка (самый простой путь для мок-данных)
           _todosFuture = AuthService().fetchUserTodos(
             widget.user.id,
             widget.user.token,
@@ -97,7 +86,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
         });
       }
     } catch (e) {
-      // Имитация ошибки
       if (mounted) {
         ScaffoldMessenger.of(
           context,
@@ -111,7 +99,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tasks for ${widget.user.firstName}'),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.cyan,
       ),
       body: FutureBuilder<List<Todo>>(
         future: _todosFuture,
@@ -145,11 +133,11 @@ class _TodoListScreenState extends State<TodoListScreen> {
           return const Center(child: Text('Start adding tasks!'));
         },
       ),
-      // *** ШАГ 4: КНОПКА ВЫЗЫВАЕТ НОВЫЙ МЕТОД ***
+      // ШАГ 4: КНОПКА ВЫЗЫВАЕТ НОВЫЙ МЕТОД
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddTodoDialog,
         child: const Icon(Icons.add),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.cyan,
       ),
     );
   }

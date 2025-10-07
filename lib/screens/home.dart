@@ -127,7 +127,7 @@ class _HomeState extends State<Home> {
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             labelText: 'Username',
-                            hintText: 'Emily',
+                            hintText: 'emilys',
                             labelStyle: const TextStyle(color: Colors.white70),
                             filled: true,
                             fillColor: Colors.white.withOpacity(0.2),
@@ -186,8 +186,8 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  const Text(
-                    'Help: Emily | emilyspass',
+                  const SelectableText(
+                    'Help:emilys | emilyspass',
                     style: TextStyle(fontSize: 14, color: Colors.white54),
                   ),
                 ],
