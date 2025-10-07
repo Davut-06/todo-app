@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-// 1. Импорты для работы с API
 import 'package:app_todo/services/auth_service.dart';
 import 'package:app_todo/models/user.dart';
-import 'todo_list_screen.dart'; // Перенаправление на этот экран
+import 'todo_list_screen.dart';
 
-// Твой класс Home теперь становится экраном логина
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -76,7 +74,7 @@ class _HomeState extends State<Home> {
           // 1. Фоновое изображение (ПЕРВЫЙ ЭЛЕМЕНТ В STACK)
           Positioned.fill(
             child: Image.asset(
-              'assets/images/1b.jpg', // <--- ЗАМЕНИТЕ НА ПУТЬ К ВАШЕМУ ФОНОВОМУ ИЗОБРАЖЕНИЮ
+              'assets/images/1b.jpg',
               fit: BoxFit.cover, // Растянуть изображение на весь экран
             ),
           ),
@@ -187,7 +185,7 @@ class _HomeState extends State<Home> {
                   ),
                   const SizedBox(height: 40),
                   const SelectableText(
-                    'Help:emilys | emilyspass',
+                    'Help: emilys | emilyspass',
                     style: TextStyle(fontSize: 14, color: Colors.white54),
                   ),
                 ],

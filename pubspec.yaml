@@ -1,7 +1,7 @@
 name: app_todo
 description: "A new Flutter project."
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none' 
 
 
 version: 1.0.0+1
@@ -13,7 +13,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.5.0 # Самая свежая стабильная версия
+  http: ^1.5.0 # стабильная версия
   google_fonts: ^6.1.0
 
 

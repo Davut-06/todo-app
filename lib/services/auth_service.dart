@@ -82,9 +82,8 @@ class AuthService {
     }
   }
 
-  // ------------------------------------------------------------------
-  // *** ИСПРАВЛЕНИЕ: МЕТОД 3 ДОБАВЛЕН ВНУТРЬ КЛАССА AuthService ***
-  // ------------------------------------------------------------------
+  // ИСПРАВЛЕНИЕ: МЕТОД 3 ДОБАВЛЕН ВНУТРЬ КЛАССА AuthService
+
   Future<Todo> addTodo(Todo newTodo, int userId, String token) async {
     // 1. Имитация задержки сети
     await Future.delayed(const Duration(milliseconds: 700));
