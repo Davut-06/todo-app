@@ -1,0 +1,19 @@
+{
+  "myTasks": "My Tasks",
+  "addNewTask": "Add New Task",
+  "editTask": "Edit Task",
+  "cancel": "Cancel",
+  "save": "Save",
+  "enterTaskName": "Enter task name",
+  "enterDescription": "Enter description",
+  "editTaskName": "Edit task name",
+  "editDescription": "Edit description",
+  "taskAdded": "Task added successfully!",
+  "taskEdited": "Task edited successfully",
+  "taskDeleted": "Task deleted successfully!",
+  "taskStatusUpdated": "Task status updated successfully!",
+  "errorAddingTask": "Error adding task: {error}",
+  "errorEditingTask": "Error editing task: {error}",
+  "errorDeletingTask": "Error deleting task: {error}",
+  "errorUpdatingStatus": "Error updating status: {error}"
+}

@@ -1,7 +1,10 @@
+import 'package:app_todo/services/api_client.dart';
 import 'package:flutter/material.dart';
-import 'package:app_todo/services/auth_service.dart';
-import 'package:app_todo/models/user.dart';
+// УДАЛЯЕМ: import 'package:app_todo/models/user.dart'; // User больше не нужен здесь
 import 'todo_list_screen.dart';
+
+// Если вы используете GoRouter, возможно, вам понадобится:
+// import 'package:go_router/go_router.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,15 +17,11 @@ class _HomeState extends State<Home> {
   // 2. Переменные для логина
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthService _authService = AuthService();
+  final ApiClient _authService = ApiClient();
   bool _isLoading = false;
 
-  // 3. Метод обработки входа (ОБНОВЛЕННЫЙ с отладкой)
+  // 3. Метод обработки входа
   Future<void> _handleLogin() async {
-    // --- ПЕЧАТЬ ДЛЯ ПРОВЕРКИ ---
-    print('--- КНОПКА НАЖАТА, МЕТОД ВЫЗВАН ---');
-    // ----------------------------
-
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter username and password.')),
@@ -35,28 +34,37 @@ class _HomeState extends State<Home> {
     });
 
     try {
-      final User user = await _authService.login(
+      // ИСПРАВЛЕНО: Вызываем login. Результат (токен) автоматически сохраняется.
+      await _authService.login(
         _usernameController.text,
         _passwordController.text,
       );
 
-      // Проверка, что виджет все еще в дереве (ВАЖНО для async)
       if (!mounted) return;
 
-      // УСПЕХ: Перенаправляем на новый экран задач
+      // ИСПРАВЛЕНО: Перенаправляем на экран задач БЕЗ передачи User.
+      // Если вы используете GoRouter (как видно из main.dart):
+      // GoRouter.of(context).go('/');
+
+      // Если вы используете Navigator.pushReplacement:
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => TodoListScreen(user: user)),
+        MaterialPageRoute(builder: (context) => const TodoListScreen()),
       );
     } catch (e) {
-      // ОШИБКА: Теперь показываем более детальную информацию
+      // В случае ошибки Dio, e будет содержать полезную информацию
       print('--- ОШИБКА АУТЕНТИФИКАЦИИ В UI ---');
-      print(e); // Вывод полного исключения из AuthService
+      print(e);
 
-      // Показываем ошибку, которую нам передал AuthService (включая статус и сообщение)
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed. Error: ${e.toString()}')),
-      );
+      String errorMessage = 'Login failed. Check credentials.';
+      // Вы можете добавить обработку DioException для лучшего сообщения
+      // if (e is DioException && e.response?.statusCode == 401) {
+      //   errorMessage = 'Invalid username or password.';
+      // }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(errorMessage)));
     } finally {
       setState(() {
         _isLoading = false;
@@ -66,27 +74,20 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    // ... (весь код build остается без изменений)
     return Scaffold(
-      // Убираем AppBar для чистого экрана
       body: Stack(
-        // Используем Stack для размещения изображения под UI
         children: [
-          // 1. Фоновое изображение (ПЕРВЫЙ ЭЛЕМЕНТ В STACK)
           Positioned.fill(
-            child: Image.asset(
-              'assets/images/1b.jpg',
-              fit: BoxFit.cover, // Растянуть изображение на весь экран
-            ),
+            child: Image.asset('assets/images/1b.jpg', fit: BoxFit.cover),
           ),
 
-          // 2. Весь остальной UI (поверх изображения)
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // 1. Заголовок
                   const Text(
                     'WELCOME',
                     style: TextStyle(
@@ -102,7 +103,6 @@ class _HomeState extends State<Home> {
                   ),
                   const SizedBox(height: 40),
 
-                  // 2. Блок входа (Карточка)
                   Container(
                     padding: const EdgeInsets.all(25.0),
                     decoration: BoxDecoration(
@@ -119,13 +119,12 @@ class _HomeState extends State<Home> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Поле Username
                         TextField(
                           controller: _usernameController,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             labelText: 'Username',
-                            hintText: 'emilys',
+                            hintText: 'ahmet',
                             labelStyle: const TextStyle(color: Colors.white70),
                             filled: true,
                             fillColor: Colors.white.withOpacity(0.2),
@@ -137,14 +136,13 @@ class _HomeState extends State<Home> {
                         ),
                         const SizedBox(height: 15),
 
-                        // Поле Password
                         TextField(
                           controller: _passwordController,
                           obscureText: true,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             labelText: 'Password',
-                            hintText: 'emilyspass',
+                            hintText: 'ahmet',
                             labelStyle: const TextStyle(color: Colors.white70),
                             filled: true,
                             fillColor: Colors.white.withOpacity(0.2),
@@ -156,7 +154,6 @@ class _HomeState extends State<Home> {
                         ),
                         const SizedBox(height: 30),
 
-                        // Кнопка LOGIN
                         _isLoading
                             ? const CircularProgressIndicator(
                               color: Colors.cyanAccent,
@@ -185,7 +182,7 @@ class _HomeState extends State<Home> {
                   ),
                   const SizedBox(height: 40),
                   const SelectableText(
-                    'Help: emilys | emilyspass',
+                    'Help: ahmet | ahmet',
                     style: TextStyle(fontSize: 14, color: Colors.white54),
                   ),
                 ],
